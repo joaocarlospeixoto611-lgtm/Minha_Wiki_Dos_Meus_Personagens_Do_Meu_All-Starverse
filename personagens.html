@@ -1,0 +1,522 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#101014">
+    <title>Personagens | All-Stars Wiki</title>
+    <link rel="stylesheet" href="style.css">
+
+    <style>
+        .catalog-page {
+            --catalog-bg: #101014;
+            --catalog-panel: #19191f;
+            --catalog-border: #30303a;
+            --catalog-muted: #a3a3b2;
+            --catalog-text: #f4f2f8;
+            --catalog-accent: #b59aff;
+            min-height: 100vh;
+            padding: 28px clamp(16px, 4vw, 56px) 60px;
+            color: var(--catalog-text);
+            background:
+                radial-gradient(ellipse at 50% 0%, #302344 0%, transparent 48%),
+                var(--catalog-bg);
+        }
+
+        .catalog-page * {
+            box-sizing: border-box;
+        }
+
+        .catalog-wrap {
+            max-width: 1450px;
+            margin: 0 auto;
+        }
+
+        .catalog-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            flex-wrap: wrap;
+            margin-bottom: 48px;
+        }
+
+        .catalog-brand {
+            color: var(--catalog-text);
+            font-size: 1.05rem;
+            font-weight: 900;
+            letter-spacing: 2px;
+            text-decoration: none;
+        }
+
+        .catalog-brand span {
+            color: var(--catalog-accent);
+        }
+
+        .catalog-top-link {
+            color: var(--catalog-muted);
+            text-decoration: none;
+            font-size: .9rem;
+        }
+
+        .catalog-top-link:hover {
+            color: white;
+        }
+
+        .catalog-hero {
+            max-width: 850px;
+            margin: 0 auto 42px;
+            text-align: center;
+        }
+
+        .catalog-eyebrow {
+            display: inline-block;
+            margin-bottom: 14px;
+            padding: 7px 12px;
+            border: 1px solid #665084;
+            border-radius: 999px;
+            color: #d3c0ff;
+            background: #261c35;
+            font-size: .72rem;
+            font-weight: 800;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .catalog-hero h1 {
+            margin: 0;
+            font-size: clamp(2.5rem, 7vw, 5rem);
+            line-height: 1.02;
+            letter-spacing: -2px;
+        }
+
+        .catalog-hero h1 span {
+            color: var(--catalog-accent);
+        }
+
+        .catalog-hero p {
+            max-width: 650px;
+            margin: 20px auto 0;
+            color: var(--catalog-muted);
+            font-size: 1.05rem;
+            line-height: 1.8;
+        }
+
+        .catalog-stats {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-top: 26px;
+        }
+
+        .catalog-stat {
+            min-width: 115px;
+            padding: 13px 18px;
+            border: 1px solid var(--catalog-border);
+            border-radius: 14px;
+            background: #17171d;
+        }
+
+        .catalog-stat strong {
+            display: block;
+            color: var(--catalog-accent);
+            font-size: 1.45rem;
+        }
+
+        .catalog-stat span {
+            color: var(--catalog-muted);
+            font-size: .78rem;
+        }
+
+        .catalog-controls {
+            margin: 0 0 28px;
+            padding: 20px;
+            border: 1px solid var(--catalog-border);
+            border-radius: 18px;
+            background: rgba(25, 25, 31, .92);
+        }
+
+        .catalog-search-label {
+            display: block;
+            margin-bottom: 9px;
+            color: #e5dafa;
+            font-size: .82rem;
+            font-weight: 800;
+        }
+
+        .catalog-search {
+            width: 100%;
+            padding: 15px 17px;
+            border: 1px solid #41414d;
+            border-radius: 12px;
+            outline: none;
+            color: white;
+            background: #101014;
+            font: inherit;
+        }
+
+        .catalog-search:focus {
+            border-color: var(--catalog-accent);
+            box-shadow: 0 0 0 3px #b59aff22;
+        }
+
+        .catalog-filters {
+            display: flex;
+            gap: 9px;
+            flex-wrap: wrap;
+            margin-top: 17px;
+        }
+
+        .catalog-filter {
+            padding: 10px 14px;
+            border: 1px solid #393943;
+            border-radius: 10px;
+            color: #d1cfda;
+            background: #202027;
+            font: inherit;
+            font-size: .83rem;
+            cursor: pointer;
+            transition: .2s ease;
+        }
+
+        .catalog-filter:hover {
+            border-color: #9e83d4;
+            color: white;
+        }
+
+        .catalog-filter.active {
+            border-color: var(--catalog-accent);
+            color: #17121f;
+            background: var(--catalog-accent);
+            font-weight: 800;
+        }
+
+        .catalog-results {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin: 28px 0 17px;
+        }
+
+        .catalog-results h2 {
+            margin: 0;
+            font-size: 1.3rem;
+        }
+
+        .catalog-results p {
+            margin: 0;
+            color: var(--catalog-muted);
+            font-size: .88rem;
+        }
+
+        .catalog-grid {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 18px;
+        }
+
+        .character-card {
+            display: flex;
+            min-width: 0;
+            flex-direction: column;
+            overflow: hidden;
+            border: 1px solid var(--catalog-border);
+            border-radius: 16px;
+            background: linear-gradient(160deg, #202027, #15151a);
+            text-decoration: none;
+            color: var(--catalog-text);
+            transition: transform .2s ease, border-color .2s ease, box-shadow .2s ease;
+        }
+
+        .character-card:hover {
+            transform: translateY(-5px);
+            border-color: #9278c4;
+            box-shadow: 0 12px 32px #0005;
+        }
+
+        .character-art {
+            position: relative;
+            display: grid;
+            min-height: 205px;
+            aspect-ratio: 4 / 3;
+            place-items: center;
+            overflow: hidden;
+            background:
+                radial-gradient(ellipse at 50% 100%, var(--team-glow, #7956a8) 0%, transparent 65%),
+                #111116;
+        }
+
+        .character-art img {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            inset: 0;
+            object-fit: cover;
+            object-position: center 25%;
+            transition: transform .3s ease;
+        }
+
+        .character-card:hover .character-art img {
+            transform: scale(1.045);
+        }
+
+        .character-placeholder {
+            padding: 20px;
+            color: var(--team-glow, #b59aff);
+            font-size: 3.2rem;
+            font-weight: 900;
+            opacity: .85;
+        }
+
+        .character-team {
+            position: absolute;
+            top: 12px;
+            left: 12px;
+            z-index: 2;
+            padding: 6px 9px;
+            border: 1px solid #ffffff2b;
+            border-radius: 8px;
+            color: white;
+            background: #111116d9;
+            font-size: .7rem;
+            font-weight: 800;
+            backdrop-filter: blur(8px);
+        }
+
+        .character-info {
+            display: flex;
+            flex: 1;
+            flex-direction: column;
+            padding: 16px;
+        }
+
+        .character-info h3 {
+            margin: 0;
+            font-size: 1.08rem;
+        }
+
+        .character-real-name {
+            margin: 5px 0 12px;
+            color: var(--catalog-muted);
+            font-size: .8rem;
+        }
+
+        .character-power {
+            margin: 0 0 10px;
+            color: #d5c3ff;
+            font-size: .83rem;
+            font-weight: 700;
+        }
+
+        .character-description {
+            flex: 1;
+            margin: 0;
+            color: #b7b5c2;
+            font-size: .84rem;
+            line-height: 1.65;
+        }
+
+        .character-open {
+            display: block;
+            margin-top: 16px;
+            padding-top: 12px;
+            border-top: 1px solid #ffffff12;
+            color: var(--catalog-accent);
+            font-size: .8rem;
+            font-weight: 800;
+        }
+
+        .catalog-empty {
+            grid-column: 1 / -1;
+            padding: 45px 20px;
+            border: 1px dashed #45414f;
+            border-radius: 16px;
+            text-align: center;
+            color: var(--catalog-muted);
+        }
+
+        .catalog-empty strong {
+            display: block;
+            margin-bottom: 8px;
+            color: white;
+            font-size: 1.1rem;
+        }
+
+        .catalog-footer {
+            margin-top: 52px;
+            padding-top: 22px;
+            border-top: 1px solid var(--catalog-border);
+            color: var(--catalog-muted);
+            text-align: center;
+            font-size: .82rem;
+            line-height: 1.8;
+        }
+
+        @media (max-width: 1100px) {
+            .catalog-grid {
+                grid-template-columns: repeat(3, minmax(0, 1fr));
+            }
+        }
+
+        @media (max-width: 760px) {
+            .catalog-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+                gap: 12px;
+            }
+
+            .catalog-page {
+                padding: 20px 14px 40px;
+            }
+
+            .catalog-top {
+                margin-bottom: 36px;
+            }
+
+            .character-art {
+                min-height: 145px;
+            }
+
+            .character-info {
+                padding: 12px;
+            }
+
+            .character-info h3 {
+                font-size: .98rem;
+            }
+
+            .character-description {
+                font-size: .79rem;
+            }
+
+            .catalog-controls {
+                padding: 14px;
+            }
+
+            .catalog-filter {
+                flex: 1 1 auto;
+            }
+        }
+
+        @media (max-width: 380px) {
+            .catalog-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .character-art {
+                min-height: 220px;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .character-card,
+            .character-art img,
+            .catalog-filter {
+                transition: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <main class="catalog-page">
+        <div class="catalog-wrap">
+
+            <header class="catalog-top">
+                <a class="catalog-brand" href="personagens.html">
+                    ✦ ALL-STARS <span>WIKI</span>
+                </a>
+                <a class="catalog-top-link" href="index.html">
+                    ← Página do FireFox
+                </a>
+            </header>
+
+            <section class="catalog-hero">
+                <span class="catalog-eyebrow">Arquivo oficial · Terra-006</span>
+                <h1>Arquivo de <span>Personagens</span></h1>
+                <p>
+                    Heróis, anti-heróis e jovens extraordinários.
+                    Conheça as equipes, seus poderes e as histórias por trás
+                    de cada integrante de All-Stars: Against the World.
+                </p>
+
+                <div class="catalog-stats">
+                    <div class="catalog-stat">
+                        <strong id="totalCharacters">29</strong>
+                        <span>Personagens</span>
+                    </div>
+                    <div class="catalog-stat">
+                        <strong id="totalTeams">6</strong>
+                        <span>Equipes</span>
+                    </div>
+                    <div class="catalog-stat">
+                        <strong id="visibleCharacters">29</strong>
+                        <span>Exibidos</span>
+                    </div>
+                </div>
+            </section>
+
+            <section class="catalog-controls" aria-label="Pesquisar e filtrar personagens">
+                <label class="catalog-search-label" for="characterSearch">
+                    PESQUISAR NO ARQUIVO
+                </label>
+
+                <input
+                    type="search"
+                    class="catalog-search"
+                    id="characterSearch"
+                    placeholder="Digite um nome, identidade ou poder..."
+                    autocomplete="off"
+                >
+
+                <div class="catalog-filters" id="teamFilters">
+                    <button class="catalog-filter active" data-team="all" aria-pressed="true">
+                        Todos
+                    </button>
+                    <button class="catalog-filter" data-team="alpha" aria-pressed="false">
+                        Α · Alpha
+                    </button>
+                    <button class="catalog-filter" data-team="beta" aria-pressed="false">
+                        Β · Beta
+                    </button>
+                    <button class="catalog-filter" data-team="gamma" aria-pressed="false">
+                        Γ · Gamma
+                    </button>
+                    <button class="catalog-filter" data-team="delta" aria-pressed="false">
+                        Δ · Delta
+                    </button>
+                    <button class="catalog-filter" data-team="epsilon" aria-pressed="false">
+                        Ε · Epsilon
+                    </button>
+                    <button class="catalog-filter" data-team="zeta" aria-pressed="false">
+                        Ζ · Zeta
+                    </button>
+                </div>
+            </section>
+
+            <section aria-labelledby="catalogHeading">
+                <div class="catalog-results">
+                    <h2 id="catalogHeading">Todos os personagens</h2>
+                    <p id="resultDescription" aria-live="polite">29 personagens encontrados</p>
+                </div>
+
+                <div class="catalog-grid" id="characterGrid">
+                    <div class="catalog-empty">Carregando o arquivo de personagens...</div>
+                </div>
+            </section>
+
+            <footer class="catalog-footer">
+                <strong>ALL-STARS: AGAINST THE WORLD</strong><br>
+                Um universo de poderes, conflitos, amizade e escolhas.<br>
+                Arquivo de personagens · Terra-006
+            </footer>
+
+        </div>
+    </main>
+
+    <script src="personagens.js"></script>
+</body>
+</html>
